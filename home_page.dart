@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -77,7 +78,7 @@ class HomePage extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    Image.asset('assets/llama1.jpg', height: 200),
+                    Image.asset('assets/gallery/llama1.jpg', height: 200),
                     SizedBox(height: 20),
                     Text(
                       'Welcome to the World of Llamas!',
@@ -106,7 +107,7 @@ class HomePage extends StatelessWidget {
               Row(
                 children: <Widget>[
                   Expanded(
-                    child: Image.asset('assets/llama2.jpg', height: 150),
+                    child: Image.asset('assets/gallery/llama2.jpg', height: 150),
                   ),
                   SizedBox(width: 10),
                   Expanded(
@@ -181,3 +182,5 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+
