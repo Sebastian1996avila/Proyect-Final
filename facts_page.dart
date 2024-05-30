@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'cart_model.dart';
 
 class FactsPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('The Llamas for sale '),
+        title: Text('The Llamas for sale'),
         backgroundColor: Color.fromRGBO(255, 235, 59, 1),
         toolbarHeight: 100,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.pushNamed(context, '/cart');
+            },
+          ),
+        ],
       ),
-       body: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -35,10 +44,7 @@ class FactsPage extends StatelessWidget {
                 ),
                 trailing: ElevatedButton(
                   onPressed: () {
-                    String productPrice = '800 USD';
-                    int price = int.tryParse(productPrice.split(' ')[0]) ?? 0;
-                    print(price); // Esto imprimirá 800
-                    // Puedes usar 'price' para la lógica del carrito
+                    context.read<CartModel>().add('LLama Cobaya de las Montañas - 800 USD');
                   },
                   child: Text('Añadir al carrito'),
                 ),
@@ -62,15 +68,11 @@ class FactsPage extends StatelessWidget {
                 ),
                 trailing: ElevatedButton(
                   onPressed: () {
-                    String productPrice = '1000 USD';
-                    int price = int.tryParse(productPrice.split(' ')[0]) ?? 0;
-                    print(price); // Esto imprimirá 1000
-                    // Puedes usar 'price' para la lógica del carrito
+                    context.read<CartModel>().add('LLama Americana - 1000 USD');
                   },
                   child: Text('Añadir al carrito'),
                 ),
               ),
-              
             ],
           ),
         ),
