@@ -1,5 +1,6 @@
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'theme_notifier.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -7,8 +8,16 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('World of Llamas'),
-        backgroundColor:Color.fromRGBO(255, 235, 59, 1),
+        backgroundColor: Color.fromRGBO(255, 235, 59, 1),
         toolbarHeight: 100,
+            actions: [
+          IconButton(
+            icon: Icon(Icons.brightness_6),
+            onPressed: () {
+              Provider.of<ThemeNotifier>(context, listen: false).toggleTheme();
+            },
+          ),
+        ],
       ),
       drawer: Drawer(
         child: ListView(
@@ -45,25 +54,26 @@ class HomePage extends StatelessWidget {
             ListTile(
               title: const Text('About Llamas'),
               onTap: () {
-            
+                // Navegar a la página About Llamas
               },
             ),
             ListTile(
               title: const Text('Llama Facts'),
               onTap: () {
-                  Navigator.pushNamed(context, '/facts');
+                Navigator.pushNamed(context, '/facts');
               },
             ),
             ListTile(
               title: const Text('Contact Us'),
               onTap: () {
-                // Navigate to contact page
+                Navigator.pushNamed(context, '/contacts');
+                // Navegar a la página de Contacto
               },
             ),
             ListTile(
               title: const Text('Gallery'),
               onTap: () {
-                Navigator.pushNamed(context, '/gallery'); // Navegar a la galería
+                Navigator.pushNamed(context, '/gallery');
               },
             ),
           ],
@@ -89,20 +99,12 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'Introduction',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10),
-              Text(
+              buildSectionTitle('Introduction'),
+              buildCardContent(
                 'Llamas are domesticated South American camelids, widely used as meat and pack animals by Andean cultures since the Pre-Columbian era.',
-                style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 20),
-              Text(
-                'Characteristics',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
+              buildSectionTitle('Characteristics'),
               SizedBox(height: 10),
               Row(
                 children: <Widget>[
@@ -114,14 +116,12 @@ class HomePage extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text(
+                        buildCardContent(
                           'Llamas are very social animals and live with others as a herd. Their wool is very soft and lanolin-free.',
-                          style: TextStyle(fontSize: 18),
                         ),
                         SizedBox(height: 10),
-                        Text(
+                        buildCardContent(
                           'They can learn simple tasks after a few repetitions. When correctly reared, they are very friendly and pleasant to be around.',
-                          style: TextStyle(fontSize: 18),
                         ),
                       ],
                     ),
@@ -129,49 +129,34 @@ class HomePage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20),
-              Text(
-                'Did You Know?',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
+              buildSectionTitle('Did You Know?'),
               SizedBox(height: 10),
-              Container(
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.yellow[100],
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color:Color.fromRGBO(255, 235, 59, 1)),
-                ),
-                child: Text(
-                  'Llamas communicate with each other through a series of ear, body and tail postures, as well as through vocalizations. The most common sound is a hum.',
-                  style: TextStyle(fontSize: 18),
-                ),
+              buildFactCard(
+                'Llamas communicate with each other through a series of ear, body and tail postures, as well as through vocalizations. The most common sound is a hum.',
               ),
               SizedBox(height: 20),
-              Text(
-                'Explore More',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
+              buildSectionTitle('Explore More'),
               SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/gallery');
-                    },
-                    child: Text('Gallery'),
+                  buildCustomButton(
+                    context,
+                    'Gallery',
+                    Icons.photo_album,
+                    '/gallery',
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                        Navigator.pushNamed(context, '/facts');
-                    },
-                    child: Text('Facts'),
+                  buildCustomButton(
+                    context,
+                    'Facts',
+                    Icons.lightbulb,
+                    '/facts',
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                    
-                    },
-                    child: Text('Contact'),
+                  buildCustomButton(
+                    context,
+                    'Contact',
+                    Icons.contact_page,
+                    '/contacts',
                   ),
                 ],
               ),
@@ -181,6 +166,62 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
+  Widget buildSectionTitle(String title) {
+    return Text(
+      title,
+      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget buildCardContent(String content) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 10),
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          content,
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
+
+  Widget buildFactCard(String fact) {
+    return Card(
+      color: Colors.yellow[100],
+      elevation: 4,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(color: Color.fromRGBO(255, 235, 59, 1)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          fact,
+          style: TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
+
+  Widget buildCustomButton(BuildContext context, String text, IconData icon, String route) {
+    return ElevatedButton.icon(
+      style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+      onPressed: () {
+        Navigator.pushNamed(context, route);
+      },
+      icon: Icon(icon, size: 24),
+      label: Text(
+        text,
+        style: TextStyle(fontSize: 18),
+      ),
+    );
+  }
 }
-
-
